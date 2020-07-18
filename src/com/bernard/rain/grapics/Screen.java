@@ -4,7 +4,7 @@ public class Screen {
     private int width, height;
     public int[] pixels;
 
-    int time = 0;
+    int xTime = 0, yTime = 0;
     int counter = 0;
 
     public Screen(int width, int height) {
@@ -22,12 +22,17 @@ public class Screen {
 
     public void render(){
         counter++;
-        if (counter % 100 == 0){
-            time++;
-        }
+
+        if (counter % 100 == 0) xTime++;
+        if (counter % 100 == 0) yTime++;
+
         for (int y = 0; y < height; y++) {
+            if (yTime < 0 || yTime >= height) break;
+
             for (int x = 0; x < width; x++) {
-                pixels[time + time * width] = 0xFF00FF;
+                if (xTime < 0 || xTime >= width) break;
+
+                pixels[xTime + yTime * width] = 0xFF00FF;
             }
         }
     }
