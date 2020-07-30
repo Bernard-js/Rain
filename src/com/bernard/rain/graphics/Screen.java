@@ -1,15 +1,16 @@
 package com.bernard.rain.graphics;
 
+import com.bernard.rain.level.tile.Tile;
+
 import java.util.Random;
 
 public class Screen {
-    private int width, height;
+    public int width, height;
     public int[] pixels;
     public final int MAP_SIZE = 8;
     public final int MAP_SIZE_MASK = MAP_SIZE - 1;
-
+    public int xOffset, yOffset;
     public int[] tiles = new int[MAP_SIZE * MAP_SIZE];
-
     private Random random = new Random();
 
     public Screen(int width, int height) {
@@ -29,21 +30,21 @@ public class Screen {
         }
     }
 
-    public void render(int xOffset, int yOffset){
-        for (int y = 0;  y < height; y++) {
-
-            int yy = y + yOffset;
-            //if (yy < 0 || yy >= height) break;
-
-            for (int x = 0; x < width; x++) {
-
-                int xx = x + xOffset;
-                //if (xx < 0 || xx >= width) break;
-
-                int tileIndex = ((xx >> 4) & MAP_SIZE_MASK) + ((yy >> 4) & MAP_SIZE_MASK) * MAP_SIZE;
-                pixels[x + y * width] = Sprite.grass.pixels[(x & 15) + (y & 15) * Sprite.grass.SPRITE_SIZE];
+    public void renderTile(int xp, int yp, Tile tile){
+        xp -= xOffset;
+        yp -= yOffset;
+        for (int y = 0; y < tile.sprite.SPRITE_SIZE; y++) {
+            int ya = y + yp;
+            for (int x = 0; x < tile.sprite.SPRITE_SIZE; x++) {
+                int xa = x + xp;
+                if (xa < 0 || xa >= width || ya < 0 || ya >= height) break;
+                pixels[xa + ya * width] = tile.sprite.pixels[x + y * tile.sprite.SPRITE_SIZE] ;
             }
         }
     }
 
+    public void setOffset(int xOffset, int yOffset){
+        this.xOffset = xOffset;
+        this.yOffset = yOffset;
+    }
 }

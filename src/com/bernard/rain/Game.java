@@ -2,6 +2,8 @@ package com.bernard.rain;
 
 import com.bernard.rain.graphics.Screen;
 import com.bernard.rain.input.Keyboard;
+import com.bernard.rain.level.Level;
+import com.bernard.rain.level.RandomLevel;
 
 import javax.swing.JFrame;
 import java.awt.*;
@@ -17,9 +19,9 @@ public class Game extends Canvas implements Runnable{
 
     private Thread thread;
     private JFrame frame;
+    private Level level;
     private Keyboard key;
     private boolean running = false;
-
     private Screen screen;
 
     private BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
@@ -32,6 +34,7 @@ public class Game extends Canvas implements Runnable{
         screen = new Screen(width, height);
         key = new Keyboard();
         frame = new JFrame();
+        level = new RandomLevel(64, 64);
 
         addKeyListener(key);
     }
@@ -59,7 +62,7 @@ public class Game extends Canvas implements Runnable{
         double delta = 0;
         int frames = 0;
         int updates = 0;
-
+        requestFocus();
         while (running) {
             long now = System.nanoTime();
             delta += (now - lastTime) / ns;
@@ -99,7 +102,7 @@ public class Game extends Canvas implements Runnable{
         }
 
         screen.clear();
-        screen.render(x, y);
+        level.render(x, y, screen);
 
         for (int i = 0; i < pixels.length; i++) {
             pixels[i] = screen.pixels[i];

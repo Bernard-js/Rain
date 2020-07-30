@@ -7,6 +7,7 @@ public class Sprite {
     private SpriteSheet sheet;
 
     public static Sprite grass = new Sprite(16, 0, 0, SpriteSheet.tiles);
+    public static Sprite voidSprite = new Sprite(16, 0x1b34ba);
 
     public Sprite(int spriteSize, int x, int y, SpriteSheet sheet){
         SPRITE_SIZE = spriteSize;
@@ -15,6 +16,18 @@ public class Sprite {
         this.y = y * spriteSize;
         this.sheet = sheet;
         load();
+    }
+
+    public Sprite(int spriteSize, int color){
+        SPRITE_SIZE = spriteSize;
+        pixels = new int[SPRITE_SIZE * SPRITE_SIZE];
+        setColor(color);
+    }
+
+    private void setColor(int color) {
+        for (int i = 0; i < pixels.length; i++){
+            pixels[i] = color;
+        }
     }
 
     private void load(){
